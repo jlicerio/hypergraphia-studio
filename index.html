@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Hypergraphia Studio creates immersive media systems for museums, public spaces, theaters, and cultural partners.">
+<title>Hypergraphia Studio — Media Art Systems</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="field" aria-hidden="true"></canvas>
+<div class="noise" aria-hidden="true"></div>
+<header class="site-header">
+  <a class="wordmark" href="#studio" aria-label="Hypergraphia Studio home">HYPERGRAPHIA<span>®</span></a>
+  <div class="header-tools"><p class="location">RGV / TEXAS / USA</p><button class="theme-toggle" type="button" aria-label="Switch to light mode" aria-pressed="false"><span class="theme-dot"></span><span class="theme-label">LIGHT</span></button></div>
+</header>
+<main>
+  <section class="cover" id="studio">
+    <div class="cover-copy">
+      <p class="eyebrow">MEDIA ART + CREATIVE TECHNOLOGY</p>
+      <h1>We build<br><em>living systems</em><br>for light.</h1>
+      <p class="lede">Hypergraphia Studio connects art, engineering, and place through immersive AV, LED, projection, XR, and public storytelling.</p>
+      <button class="enter" type="button" data-tab="work">Explore the work <span>↗</span></button>
+    </div>
+    <div class="cover-meta"><span>01—05</span><span>SCROLL / SELECT</span></div>
+  </section>
+  <nav class="tab-bar" role="tablist" aria-label="Studio sections">
+    <button role="tab" aria-selected="true" data-tab="studio">A / Studio</button>
+    <button role="tab" aria-selected="false" data-tab="work" tabindex="-1">B / Work</button>
+    <button role="tab" aria-selected="false" data-tab="capabilities" tabindex="-1">C / Capabilities</button>
+    <button role="tab" aria-selected="false" data-tab="team" tabindex="-1">D / Team</button>
+    <button role="tab" aria-selected="false" data-tab="contact" tabindex="-1">E / Contact</button>
+  </nav>
+  <section class="panel studio-panel" id="panel-studio" role="tabpanel">
+    <div class="panel-head"><span>STUDIO NOTE</span><span>01 / 05</span></div>
+    <div class="split"><h2>Data, light,<br><span>memory, place.</span></h2><div><p>Hypergraphia is a media-art studio from the Rio Grande Valley. We create the connective tissue between a room, a story, and the people inside it.</p><p>Our practice moves from first sketch to final signal: creative direction, system design, content, installation, and care.</p></div></div>
+    <div class="statement">A studio for the moments when a display becomes a place.</div>
+  </section>
+  <section class="panel" id="panel-work" role="tabpanel" hidden>
+    <div class="panel-head"><span>SOME OF OUR WORK</span><span>02 / 05</span></div>
+    <div class="work-list">
+      <a class="work-row" href="projects/forget-me-not.html"><span class="year">2025</span><span><h3>Forget Me Not</h3><p>Exhibition technical setup / AV integration</p></span><span class="index">VIEW ↗</span></a>
+      <a class="work-row" href="projects/river-pierce.html"><span class="year">2025</span><span><h3>River Pierce Foundation</h3><p>Augmented reality showcase / public heritage</p></span><span class="index">VIEW ↗</span></a>
+      <a class="work-row" href="projects/triqueta.html"><span class="year">2023</span><span><h3>Triqueta AR / VR</h3><p>Immersive exhibition / spatial narrative</p></span><span class="index">VIEW ↗</span></a>
+    </div>
+    <div class="collab-block"><div class="panel-head"><span>COLLABORATIONS</span><span>PARTNER PRACTICE</span></div><div class="collab-list"><article><span>FILM / MEDIA</span><h3>Michael Flanagan</h3><p>Film, project management, and media production for cultural projects.</p></article><article><span>ART / CURATION</span><h3>Uriel Landeros Conquista</h3><p>Visual art, portraiture, identity, and border narratives.</p></article></div></div>
+  </section>
+  <section class="panel" id="panel-capabilities" role="tabpanel" hidden>
+    <div class="panel-head"><span>CAPABILITIES</span><span>03 / 05</span></div>
+    <div class="cap-grid"><div><span class="cap-num">01</span><h3>Creative direction</h3><p>Concept, narrative, visual language, and content systems for exhibits and public spaces.</p></div><div><span class="cap-num">02</span><h3>AV integration</h3><p>Signal flow, display systems, sound, control, commissioning, documentation, and training.</p></div><div><span class="cap-num">03</span><h3>Immersive media</h3><p>Projection mapping, LED environments, AR, VR, 3D motion, and responsive experiences.</p></div><div><span class="cap-num">04</span><h3>Heritage technology</h3><p>Digital preservation, artifact scanning, geographic stories, and accessible public interpretation.</p></div></div>
+  </section>
+  <section class="panel" id="panel-team" role="tabpanel" hidden>
+    <div class="panel-head"><span>PEOPLE</span><span>04 / 05</span></div>
+    <div class="team-list"><article><span>FOUNDER / XR + LED LEAD</span><h3>Juan Licerio</h3><p>Emerging media and digital art. Architectural design technology, software engineering, 3D, motion, projection mapping, AR, VR, and technical integration.</p></article><article><span>FILM + MEDIA</span><h3>Michael Flanagan</h3><p>Filmmaker, project manager, UTRGV media production instructor, and visual-art writer.</p></article><article><span>ART + CURATION</span><h3>Uriel Landeros Conquista</h3><p>Visual artist whose practice explores identity, cultural heritage, migration, portraiture, and border narratives.</p></article></div>
+  </section>
+  <section class="panel contact-panel" id="panel-contact" role="tabpanel" hidden>
+    <div class="panel-head"><span>PROJECT INQUIRY</span><span>05 / 05</span></div>
+    <h2>Bring us a room,<br><em>a story, or a signal.</em></h2><p>Hypergraphia works with museums, universities, artists, public agencies, theaters, and event partners.</p><p class="contact-note">McAllen, Texas<br>Available for commissions, partnerships, and public-sector proposals.</p>
+  </section>
+</main>
+<footer><span>HYPERGRAPHIA STUDIO</span><span>MEDIA ART / SYSTEMS / RGV</span></footer>
+<script src="https://unpkg.com/three@0.161.0/build/three.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
