@@ -1,0 +1,119 @@
+# Hypergraphia Generative Identity System
+
+Status: prototype implemented and verified
+Owner: Hypergraphia Studio
+Scope: Three.js generative studies, static case studies, installations, and future XR scenes
+
+## Purpose
+
+Hypergraphia needs an identity that can change without losing recognition.
+
+The identity must behave as a flexible visual language, not as one fixed logo or image.
+
+The system must support generative art, parametric studies, public installations, portfolio documentation, and XR scenes.
+
+## Research references
+
+- [Generative Gestaltung — Creative Coding for the Web](https://www.hartmut-bohnacker.de/projects/generative-design-2-0) translates Processing examples into browser-based p5.js studies.
+- [Generative Design on GitHub](https://github.com/generative-design) publishes the code packages that support the book and its examples.
+- [TwoPoints.Net](https://new.twopoints.net/) applies flexible systems across identity, editorial, and type design.
+- [Flexible Visual Systems](https://flexiblevisualsystems.info/) frames identity as a flexible system with components, assets, and applications.
+- [Hyperobjects Workbench](https://hyperobjects.design/workbench) demonstrates live interactive generative design with geometry controls.
+
+## Design principles
+
+1. **Rules create identity.** A scene changes through a controlled rule set.
+2. **Seeds create repeatability.** The same seed and parameters reproduce the same state.
+3. **Components create scale.** Small scene modules combine into larger installations.
+4. **Applications create context.** The same system can serve a studio page, portfolio case study, or XR scene.
+5. **The interface stays quiet.** UI text uses the Hypergraphia monochrome system.
+6. **The artwork can change.** Generative color belongs inside the scene, not inside operational text.
+
+## System layers
+
+### Components
+
+- `SceneCanvas`
+- `PresetTabs`
+- `ParameterPanel`
+- `SeedControl`
+- `PaletteControl`
+- `CaptureButton`
+- `StatusLine`
+- `ProvenanceList`
+
+### Assets
+
+- Flow strands
+- Orbit rings
+- Contour lines
+- Particle fields
+- Ribbons
+- Glyph grids
+- Data paths
+- Architectural volumes
+
+### Applications
+
+- Studio case studies
+- Personal portfolio pages
+- Public installation proposals
+- Museum and theatre visualizations
+- AR image-target scenes
+- XR Sandbox authoring manifests
+
+## Scene contract
+
+Every generator should accept a shared record:
+
+```json
+{
+  "id": "river-field-study",
+  "generator": "flow-field",
+  "version": "0.1.0",
+  "seed": 42,
+  "params": {
+    "density": 0.58,
+    "tension": 0.62,
+    "depth": 0.44,
+    "motion": 0.24
+  },
+  "palette": "signal",
+  "quality": "auto"
+}
+```
+
+The URL should preserve the scene, seed, and palette.
+
+```text
+/generative-system-demo.html?scene=flow&seed=42&palette=signal
+```
+
+## Runtime rules
+
+- Use Three.js for browser scenes.
+- Use seeded randomness for reproducible output.
+- Use `InstancedMesh` when repeated geometry needs scale.
+- Keep the XR renderer boundary separate from the editorial shell.
+- Preserve dark and light modes.
+- Respect `prefers-reduced-motion`.
+- Keep UI text monochrome.
+- Record generator version and renderer metadata with captures.
+
+## Current prototype
+
+The prototype lives at [`generative-system-demo.html`](../../../generative-system-demo.html).
+
+It currently includes flow, orbit, and contour generators.
+
+It supports density, tension, depth, motion, palette, seed, capture, and theme controls.
+
+It links back to the shared component demo and the studio surfaces.
+
+## Next implementation phases
+
+1. Extract the generator contract into a reusable module.
+2. Add a shared token file for static sites and XR Sandbox.
+3. Add capture metadata and downloadable JSON state.
+4. Add a Three.js XR adapter after asset and target manifests pass verification.
+5. Add case-study presets for River Pierce, Triqueta, and future heritage studies.
