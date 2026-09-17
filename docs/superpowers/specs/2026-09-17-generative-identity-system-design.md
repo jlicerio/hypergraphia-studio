@@ -110,6 +110,25 @@ It supports density, tension, depth, motion, palette, seed, capture, and theme c
 
 It links back to the shared component demo and the studio surfaces.
 
+## Idea library
+
+The Generative Gestaltung library provides eight families for the next system passes:
+
+| Source family | Hypergraphia use |
+| --- | --- |
+| P.1 Color | Palette, material, and light roles |
+| P.2 Shape | Parametric objects and architectural forms |
+| P.3 Type | Variable signage and spatial narrative |
+| P.4 Image | Scanned objects and image-derived fields |
+| M.1 Random and noise | Natural texture, particles, and uncertainty |
+| M.2 Oscillation figures | Audio-reactive motion and living lines |
+| M.5 Data trees | Heritage relationships and place-based maps |
+| M.6 Dynamic data structure | Interactive narratives and museum systems |
+
+The current prototype maps color, noise, and oscillation into existing controls.
+
+The next generator pass should add shape, type, image, data trees, and dynamic structures.
+
 ## Next implementation phases
 
 1. Extract the generator contract into a reusable module.

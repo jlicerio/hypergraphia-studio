@@ -165,6 +165,18 @@ input[type="range"] { width: 100%; height: 3px; accent-color: var(--ink); cursor
 .system-cell strong { display: block; margin-top: 38px; font-size: 28px; font-weight: 500; letter-spacing: -.05em; }
 .system-cell p { max-width: 260px; margin: 8px 0 0; color: var(--muted); }
 
+.idea-section { padding: 86px 0 0; }
+.idea-head { display: grid; grid-template-columns: minmax(0, .85fr) minmax(260px, .55fr); gap: 36px; align-items: end; }
+.idea-head h2 { margin: 0; font-size: clamp(2.8rem, 6vw, 6rem); line-height: .9; font-weight: 500; letter-spacing: -.075em; }
+.idea-head p { max-width: 410px; margin: 0; color: var(--muted); font-size: 17px; }
+.idea-list { margin-top: 34px; border-top: 1px solid var(--line); }
+.idea-row { display: grid; grid-template-columns: 80px minmax(160px, .65fr) minmax(220px, 1fr) 92px; gap: 18px; align-items: center; padding: 18px 0; border-bottom: 1px solid var(--line); text-decoration: none; }
+.idea-row:hover { background: var(--surface-2); }
+.idea-code, .idea-status { color: var(--quiet); }
+.idea-row strong { font-size: 22px; font-weight: 500; letter-spacing: -.04em; }
+.idea-row span:nth-child(3) { color: var(--muted); }
+.idea-status { text-align: right; }
+
 .application-section { padding: 86px 0 0; }
 .application-section h2 { max-width: 800px; margin: 0; font-size: clamp(2.8rem, 6vw, 6rem); line-height: .9; font-weight: 500; letter-spacing: -.075em; }
 .application-section > p { max-width: 600px; margin: 24px 0 0; color: var(--muted); font-size: 18px; }
@@ -193,6 +205,10 @@ input[type="range"] { width: 100%; height: 3px; accent-color: var(--ink); cursor
   .system-cell { border-right: 0; border-bottom: 1px solid var(--line); }
   .system-cell:last-child { border-bottom: 0; }
   .application-section { padding-top: 62px; }
+  .idea-section { padding-top: 62px; }
+  .idea-head { grid-template-columns: 1fr; gap: 18px; }
+  .idea-row { grid-template-columns: 54px 1fr auto; gap: 12px; }
+  .idea-row span:nth-child(3) { grid-column: 2 / -1; }
   .footer { flex-direction: column; padding-top: 50px; }
 }
 @media (prefers-reduced-motion: reduce) {
