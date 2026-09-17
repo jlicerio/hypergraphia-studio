@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en" data-theme="dark" data-surface="immersive">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hypergraphia System — Component Demo</title>
+  <meta name="description" content="A visual demo of the Hypergraphia shared identity and component system.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0d0f;
+      --surface: #111519;
+      --surface-raised: #171e23;
+      --surface-soft: #202a31;
+      --ink: #f3f1eb;
+      --muted: #9da8ae;
+      --quiet: #6f7b82;
+      --line: rgba(243, 241, 235, .18);
+      --line-strong: rgba(243, 241, 235, .34);
+      --studio-accent: #b99cff;
+      --system-accent: #f7734a;
+      --info: #5fddf4;
+      --success: #74e1a2;
+      --warning: #f4c86b;
+      --danger: #ff8f77;
+      --display: "Space Grotesk", system-ui, sans-serif;
+      --mono: "DM Mono", ui-monospace, monospace;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 22px;
+      --shadow: 0 24px 80px rgba(0, 0, 0, .32);
+      --unit: 4px;
+    }
+
+    html[data-theme="light"] {
+      --bg: #f2f2ef;
+      --surface: #ffffff;
+      --surface-raised: #e8e9e6;
+      --surface-soft: #dcdfdd;
+      --ink: #111416;
+      --muted: #59636a;
+      --quiet: #78838a;
+      --line: rgba(17, 20, 22, .18);
+      --line-strong: rgba(17, 20, 22, .34);
+      --shadow: 0 24px 80px rgba(17, 20, 22, .12);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--display);
+      line-height: 1.45;
+      transition: background .25s ease, color .25s ease;
+    }
+    button { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button:focus-visible, a:focus-visible { outline: 2px solid var(--info); outline-offset: 4px; }
+    .mono { font: 11px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    .muted { color: var(--muted); }
+
+    .shell { max-width: 1500px; margin: 0 auto; padding: 0 32px 80px; }
+    .topbar {
+      min-height: 84px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      border-bottom: 1px solid var(--line);
+    }
+    .brand-lockup { display: flex; align-items: baseline; gap: 13px; }
+    .brand-lockup a { color: var(--ink); text-decoration: none; font-weight: 700; letter-spacing: .12em; }
+    .brand-lockup span { color: var(--muted); }
+    .top-actions { display: flex; align-items: center; gap: 14px; }
+    .theme-toggle, .outline-button {
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--ink);
+      border-radius: 999px;
+      cursor: pointer;
+      padding: 9px 14px;
+      transition: background .2s ease, border-color .2s ease, color .2s ease;
+    }
+    .theme-toggle:hover, .outline-button:hover { border-color: var(--line-strong); background: var(--surface-raised); }
+
+    .intro { padding: 70px 0 38px; max-width: 900px; }
+    .intro h1 { margin: 0; max-width: 900px; font-size: clamp(3.2rem, 8vw, 8rem); line-height: .9; letter-spacing: -.07em; font-weight: 500; }
+    .intro h1 em { color: var(--studio-accent); font-style: normal; }
+    .intro p { max-width: 620px; color: var(--muted); font-size: 18px; margin: 26px 0 0; }
+
+    .mode-bar { display: flex; gap: 0; overflow-x: auto; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .mode-bar button { flex: 1; min-width: 150px; padding: 16px 14px; border: 0; border-right: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; text-align: left; }
+    .mode-bar button[aria-selected="true"], .mode-bar button:hover { background: var(--surface-raised); color: var(--ink); }
+    .mode-bar button[aria-selected="true"] { box-shadow: inset 0 -2px var(--system-accent); }
+
+    .section-head { display: flex; justify-content: space-between; align-items: end; gap: 24px; padding: 64px 0 20px; border-bottom: 1px solid var(--line); }
+    .section-head h2 { margin: 0; font-size: clamp(2rem, 4vw, 4rem); line-height: .98; letter-spacing: -.05em; font-weight: 500; }
+    .section-head p { max-width: 430px; margin: 0; color: var(--muted); }
+
+    .lab-grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(280px, .55fr); gap: 22px; padding-top: 22px; }
+    .viewer {
+      min-height: 560px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: #050607;
+      box-shadow: var(--shadow);
+    }
+    .viewer::before, .viewer::after { content: ""; position: absolute; border: 1px solid rgba(185, 156, 255, .34); border-radius: 50%; pointer-events: none; }
+    .viewer::before { width: 360px; height: 360px; left: 50%; top: 48%; transform: translate(-50%, -50%) rotate(18deg); }
+    .viewer::after { width: 235px; height: 235px; left: 50%; top: 48%; transform: translate(-50%, -50%) rotate(-28deg); border-color: rgba(95, 221, 244, .34); }
+    .viewer-label { position: absolute; left: 24px; top: 22px; color: rgba(255,255,255,.55); }
+    .viewer-title { position: absolute; left: 50%; top: 48%; transform: translate(-50%, -50%); width: min(80%, 480px); text-align: center; }
+    .viewer-title strong { display: block; font-size: clamp(2rem, 5vw, 5rem); line-height: .9; letter-spacing: -.07em; font-weight: 500; }
+    .viewer-title span { display: block; margin-top: 14px; color: rgba(255,255,255,.6); }
+    .carousel-control { position: absolute; z-index: 2; top: 50%; width: 48px; height: 48px; border: 1px solid rgba(255,255,255,.2); border-radius: 50%; background: rgba(12,14,16,.62); color: white; cursor: pointer; transform: translateY(-50%); backdrop-filter: blur(10px); }
+    .carousel-control:hover { background: rgba(45,48,53,.82); }
+    .carousel-control.prev { left: 18px; }
+    .carousel-control.next { right: 18px; }
+    .carousel-control svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+    .viewer-footer { position: absolute; z-index: 2; left: 20px; right: 20px; bottom: 20px; display: flex; justify-content: space-between; align-items: end; gap: 16px; }
+    .dots { display: flex; gap: 8px; align-items: center; }
+    .dot { width: 7px; height: 7px; border: 0; border-radius: 50%; padding: 0; background: rgba(255,255,255,.28); cursor: pointer; }
+    .dot[aria-current="true"] { background: white; transform: scale(1.5); }
+    .ar-button { border: 0; border-radius: 999px; background: #f4f3ef; color: #0b0d0f; cursor: pointer; padding: 12px 18px; font-weight: 600; box-shadow: 0 8px 24px rgba(0,0,0,.25); }
+    .ar-button[data-state="active"] { background: var(--success); }
+    .info-panel { position: absolute; z-index: 3; left: 50%; bottom: 78px; width: min(480px, calc(100% - 40px)); transform: translateX(-50%); padding: 15px 17px; border: 1px solid rgba(255,255,255,.14); border-radius: 16px; background: rgba(10,12,14,.72); color: white; backdrop-filter: blur(20px); }
+    .info-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+    .info-row strong { font-size: 16px; }
+    .info-row span { color: rgba(255,255,255,.45); }
+    .info-panel p { margin: 7px 0 0; color: rgba(255,255,255,.62); font-size: 12px; line-height: 1.5; }
+
+    .anatomy { border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); overflow: hidden; }
+    .anatomy-head { padding: 20px; border-bottom: 1px solid var(--line); }
+    .anatomy-head h3 { margin: 0; font-size: 22px; font-weight: 500; }
+    .anatomy-list { list-style: none; margin: 0; padding: 0; }
+    .anatomy-list li { display: flex; justify-content: space-between; gap: 16px; padding: 16px 20px; border-bottom: 1px solid var(--line); }
+    .anatomy-list li:last-child { border-bottom: 0; }
+    .anatomy-list span:last-child { color: var(--muted); text-align: right; }
+
+    .component-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 22px; padding-top: 22px; }
+    .component { border: 1px solid var(--line); border-radius: var(--radius-md); background: var(--surface); overflow: hidden; }
+    .component-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 16px 18px; border-bottom: 1px solid var(--line); }
+    .component-head strong { font-size: 17px; font-weight: 500; }
+    .component-head span { color: var(--quiet); }
+    .component-body { padding: 20px; }
+    .component--wide { grid-column: span 7; }
+    .component--medium { grid-column: span 5; }
+    .component--full { grid-column: 1 / -1; }
+
+    .project-row { display: grid; grid-template-columns: 74px 1fr 80px; gap: 18px; align-items: center; padding: 18px 0; border-bottom: 1px solid var(--line); }
+    .project-row:first-child { border-top: 1px solid var(--line); }
+    .project-row h3 { margin: 0; font-size: 26px; font-weight: 500; letter-spacing: -.04em; }
+    .project-row p { margin: 4px 0 0; color: var(--muted); }
+    .project-index { color: var(--studio-accent); }
+    .project-year { color: var(--muted); text-align: right; }
+
+    .case-study { display: grid; grid-template-columns: 1fr .95fr; gap: 24px; }
+    .case-media { min-height: 220px; display: grid; place-items: center; border-radius: var(--radius-md); background: #07090a; color: rgba(255,255,255,.46); text-align: center; }
+    .case-study h3 { margin: 0; font-size: 32px; line-height: .96; letter-spacing: -.05em; font-weight: 500; }
+    .case-study p { margin: 16px 0 0; color: var(--muted); }
+    .case-links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+    .case-links a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--line-strong); padding-bottom: 3px; }
+
+    .experience-card { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: start; padding: 18px; border: 1px solid var(--line); border-radius: var(--radius-md); background: var(--surface-raised); }
+    .experience-card h3 { margin: 12px 0 8px; font-size: 22px; font-weight: 500; }
+    .experience-card p { margin: 0; color: var(--muted); }
+    .badge { display: inline-flex; align-items: center; padding: 4px 8px; border-radius: 999px; background: rgba(95,221,244,.16); color: var(--info); font: 11px var(--mono); letter-spacing: .04em; }
+    .revision { color: var(--muted); }
+    .launch-button { align-self: end; border: 0; border-radius: 999px; background: var(--system-accent); color: #160a06; padding: 10px 14px; cursor: pointer; font-weight: 600; }
+    .launch-button[data-state="open"] { background: var(--success); }
+
+    .state-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+    .state { min-height: 100px; padding: 14px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface-raised); }
+    .state strong { display: block; margin-top: 22px; font-size: 15px; }
+    .state--waiting { color: var(--muted); }
+    .state--live { color: var(--success); }
+    .state--stale { color: var(--warning); }
+    .state--ended { color: var(--info); }
+    .state--error { color: var(--danger); }
+
+    .hierarchy { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .hierarchy-item { min-height: 150px; padding: 22px; border-right: 1px solid var(--line); }
+    .hierarchy-item:last-child { border-right: 0; }
+    .hierarchy-item strong { display: block; margin-top: 38px; font-size: 22px; font-weight: 500; }
+    .hierarchy-item p { margin: 8px 0 0; color: var(--muted); }
+    .hierarchy-item[data-role="artist"] strong { color: var(--studio-accent); }
+    .hierarchy-item[data-role="studio"] strong { color: var(--info); }
+    .hierarchy-item[data-role="product"] strong { color: var(--system-accent); }
+    .hierarchy-item[data-role="work"] strong { color: var(--success); }
+
+    .footer { display: flex; justify-content: space-between; gap: 20px; padding-top: 28px; color: var(--muted); }
+    .footer a { color: inherit; }
+    [data-surface="studio"] .viewer { border-radius: 0; box-shadow: none; }
+    [data-surface="portfolio"] .viewer { border-color: var(--studio-accent); }
+    [data-surface="authoring"] .viewer { border-color: var(--system-accent); }
+
+    @media (max-width: 900px) {
+      .shell { padding: 0 20px 60px; }
+      .lab-grid { grid-template-columns: 1fr; }
+      .component--wide, .component--medium { grid-column: 1 / -1; }
+      .state-row { grid-template-columns: repeat(2, 1fr); }
+      .hierarchy { grid-template-columns: repeat(2, 1fr); }
+      .hierarchy-item:nth-child(2) { border-right: 0; }
+      .hierarchy-item:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+    }
+    @media (max-width: 600px) {
+      .topbar { min-height: 72px; align-items: flex-start; padding-top: 20px; }
+      .top-actions { gap: 8px; }
+      .theme-toggle, .outline-button { padding: 8px 10px; }
+      .intro { padding-top: 48px; }
+      .intro p { font-size: 16px; }
+      .section-head { display: block; }
+      .section-head p { margin-top: 16px; }
+      .viewer { min-height: 500px; }
+      .viewer-title strong { font-size: 3rem; }
+      .project-row { grid-template-columns: 45px 1fr; }
+      .project-year { grid-column: 2; text-align: left; }
+      .case-study { grid-template-columns: 1fr; }
+      .experience-card { grid-template-columns: 1fr; }
+      .launch-button { justify-self: start; }
+      .hierarchy { grid-template-columns: 1fr; }
+      .hierarchy-item, .hierarchy-item:nth-child(2) { border-right: 0; border-bottom: 1px solid var(--line); }
+      .hierarchy-item:last-child { border-bottom: 0; }
+      .footer { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; scroll-behavior: auto !important; } }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand-lockup">
+        <a href="./index.html">HYPERGRAPHIA</a>
+        <span class="mono">SYSTEM / 01</span>
+      </div>
+      <div class="top-actions">
+        <a class="outline-button mono" href="./index.html">Studio</a>
+        <button class="theme-toggle mono" type="button" aria-pressed="false">Light mode</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="intro" aria-labelledby="page-title">
+        <p class="mono muted">Shared identity and component demo</p>
+        <h1 id="page-title">One system.<br><em>Many surfaces.</em></h1>
+        <p>This demo carries the RGVXR interaction language into Hypergraphia Studio, the personal portfolio, and XR Sandbox.</p>
+      </section>
+
+      <nav class="mode-bar" aria-label="Surface modes" role="tablist">
+        <button type="button" role="tab" aria-selected="true" data-mode="immersive">Immersive</button>
+        <button type="button" role="tab" aria-selected="false" data-mode="studio">Studio</button>
+        <button type="button" role="tab" aria-selected="false" data-mode="portfolio">Portfolio</button>
+        <button type="button" role="tab" aria-selected="false" data-mode="authoring">Authoring</button>
+      </nav>
+
+      <section aria-labelledby="lab-title">
+        <div class="section-head">
+          <div>
+            <p class="mono muted">Component family / 01</p>
+            <h2 id="lab-title">Immersive viewer</h2>
+          </div>
+          <p>The RGVXR carousel becomes a reusable surface. The content, theme, and entry action can change without changing the interaction grammar.</p>
+        </div>
+
+        <div class="lab-grid">
+          <article class="viewer" aria-label="Interactive XR carousel demo">
+            <div class="viewer-label mono">MEDIA SLOT / NO ASSET YET</div>
+            <div class="viewer-title">
+              <strong data-viewer-title>River Pierce AR</strong>
+              <span data-viewer-subtitle>Heritage object study / image-target experience</span>
+            </div>
+            <button class="carousel-control prev" type="button" aria-label="Previous project" data-carousel="previous">
+              <svg viewBox="0 0 24 24"><path d="m15 4-8 8 8 8"></path></svg>
+            </button>
+            <button class="carousel-control next" type="button" aria-label="Next project" data-carousel="next">
+              <svg viewBox="0 0 24 24"><path d="m9 4 8 8-8 8"></path></svg>
+            </button>
+            <div class="info-panel" data-info-panel>
+              <div class="info-row"><strong data-info-title>River Pierce AR</strong><span class="mono" data-info-count>01 / 03</span></div>
+              <p data-info-copy>Public heritage storytelling through scanned objects, image targets, and place-based interpretation.</p>
+            </div>
+            <div class="viewer-footer">
+              <div class="dots" aria-label="Project position">
+                <button class="dot" type="button" aria-label="Show River Pierce AR" aria-current="true" data-dot="0"></button>
+                <button class="dot" type="button" aria-label="Show Triqueta" aria-current="false" data-dot="1"></button>
+                <button class="dot" type="button" aria-label="Show Hypergraphia artwork" aria-current="false" data-dot="2"></button>
+              </div>
+              <button class="ar-button" type="button" data-ar-button data-state="ready">View in AR</button>
+            </div>
+          </article>
+
+          <aside class="anatomy" aria-labelledby="anatomy-title">
+            <div class="anatomy-head"><p class="mono muted">Shared behavior</p><h3 id="anatomy-title">Component anatomy</h3></div>
+            <ul class="anatomy-list">
+              <li><span>XRCarousel</span><span>navigation + dots</span></li>
+              <li><span>InfoPanel</span><span>title + context</span></li>
+              <li><span>ARButton</span><span>clear entry point</span></li>
+              <li><span>StatusPill</span><span>semantic state</span></li>
+              <li><span>Theme</span><span>surface adapter</span></li>
+            </ul>
+          </aside>
+        </div>
+      </section>
+
+      <section aria-labelledby="contexts-title">
+        <div class="section-head">
+          <div><p class="mono muted">Component family / 02</p><h2 id="contexts-title">Same system, different context</h2></div>
+          <p>The system shares tokens and behavior. Each surface keeps its own purpose and density.</p>
+        </div>
+
+        <div class="component-grid">
+          <article class="component component--wide">
+            <div class="component-head"><strong>Studio project rows</strong><span class="mono">Hypergraphia</span></div>
+            <div class="component-body">
+              <div class="project-row"><span class="project-index mono">01</span><div><h3>Triqueta</h3><p>Portrait video, AR study, and installation direction.</p></div><span class="project-year mono">AR</span></div>
+              <div class="project-row"><span class="project-index mono">02</span><div><h3>River Pierce</h3><p>Public heritage, scanning, and place-based narrative.</p></div><span class="project-year mono">2024</span></div>
+              <div class="project-row"><span class="project-index mono">03</span><div><h3>Forget Me Not</h3><p>Technical production and spatial media collaboration.</p></div><span class="project-year mono">LIVE</span></div>
+            </div>
+          </article>
+
+          <article class="component component--medium">
+            <div class="component-head"><strong>Portfolio case study</strong><span class="mono">Juan Licerio</span></div>
+            <div class="component-body case-study">
+              <div class="case-media"><span class="mono">MEDIA SLOT<br>IMAGE OR VIDEO</span></div>
+              <div><h3>Authored work with a clear technical story.</h3><p>The personal layer explains your role, process, collaborators, and outcome.</p><div class="case-links"><a href="./work.html">View work</a><a href="./team.html">Credits</a></div></div>
+            </div>
+          </article>
+
+          <article class="component component--medium">
+            <div class="component-head"><strong>Authoring card</strong><span class="mono">XR Sandbox</span></div>
+            <div class="component-body">
+              <div class="experience-card">
+                <div><span class="badge">image-target</span><span class="revision mono">r1</span><h3>Hypergraphia Artwork Series</h3><p>3 assets · MindAR target · GLB model</p></div>
+                <button class="launch-button" type="button" data-launch-button data-state="ready">Launch</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="component component--wide">
+            <div class="component-head"><strong>XR status model</strong><span class="mono">Truthful states</span></div>
+            <div class="component-body state-row" aria-label="XR status states">
+              <div class="state state--waiting"><span class="mono">01</span><strong>WAITING</strong></div>
+              <div class="state state--live"><span class="mono">02</span><strong>LIVE</strong></div>
+              <div class="state state--stale"><span class="mono">03</span><strong>STALE</strong></div>
+              <div class="state state--ended"><span class="mono">04</span><strong>ENDED</strong></div>
+              <div class="state state--error"><span class="mono">05</span><strong>ERROR</strong></div>
+            </div>
+          </article>
+
+          <article class="component component--full">
+            <div class="component-head"><strong>Identity hierarchy</strong><span class="mono">Brand architecture</span></div>
+            <div class="hierarchy">
+              <div class="hierarchy-item" data-role="artist"><span class="mono">01 / authorship</span><strong>Juan Licerio</strong><p>Personal voice and selected work.</p></div>
+              <div class="hierarchy-item" data-role="studio"><span class="mono">02 / studio</span><strong>Hypergraphia</strong><p>Multidisciplinary production identity.</p></div>
+              <div class="hierarchy-item" data-role="product"><span class="mono">03 / product</span><strong>XR Sandbox</strong><p>Private authoring and launch system.</p></div>
+              <div class="hierarchy-item" data-role="work"><span class="mono">04 / work</span><strong>Projects</strong><p>RGVXR, River Pierce, Triqueta, and more.</p></div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer mono"><span>HYPERGRAPHIA / SYSTEM DEMO</span><a href="./index.html">Return to studio</a></footer>
+  </div>
+
+  <script>
+    const root = document.documentElement;
+    const projects = [
+      { title: 'River Pierce AR', subtitle: 'Heritage object study / image-target experience', copy: 'Public heritage storytelling through scanned objects, image targets, and place-based interpretation.' },
+      { title: 'Triqueta', subtitle: 'Portrait video / augmented narrative', copy: 'A media-art case study that joins moving image, spatial context, and an installation approach.' },
+      { title: 'Hypergraphia artwork', subtitle: 'Image target / anchored 3D reveal', copy: 'A shared experience pattern for artworks that move from printed surface to spatial model.' }
+    ];
+    let projectIndex = 0;
+
+    const qs = (selector) => document.querySelector(selector);
+    const qsa = (selector) => [...document.querySelectorAll(selector)];
+
+    function renderProject() {
+      const project = projects[projectIndex];
+      qs('[data-viewer-title]').textContent = project.title;
+      qs('[data-viewer-subtitle]').textContent = project.subtitle;
+      qs('[data-info-title]').textContent = project.title;
+      qs('[data-info-count]').textContent = `${String(projectIndex + 1).padStart(2, '0')} / ${String(projects.length).padStart(2, '0')}`;
+      qs('[data-info-copy]').textContent = project.copy;
+      qsa('[data-dot]').forEach((dot) => dot.setAttribute('aria-current', String(Number(dot.dataset.dot) === projectIndex)));
+    }
+
+    qsa('[data-carousel]').forEach((button) => button.addEventListener('click', () => {
+      projectIndex = button.dataset.carousel === 'next' ? (projectIndex + 1) % projects.length : (projectIndex - 1 + projects.length) % projects.length;
+      renderProject();
+    }));
+    qsa('[data-dot]').forEach((dot) => dot.addEventListener('click', () => { projectIndex = Number(dot.dataset.dot); renderProject(); }));
+
+    qsa('[data-mode]').forEach((button) => button.addEventListener('click', () => {
+      root.dataset.surface = button.dataset.mode;
+      qsa('[data-mode]').forEach((item) => item.setAttribute('aria-selected', String(item === button)));
+    }));
+
+    qs('.theme-toggle').addEventListener('click', () => {
+      const light = root.dataset.theme !== 'light';
+      root.dataset.theme = light ? 'light' : 'dark';
+      qs('.theme-toggle').textContent = light ? 'Dark mode' : 'Light mode';
+      qs('.theme-toggle').setAttribute('aria-pressed', String(light));
+    });
+
+    qs('[data-ar-button]').addEventListener('click', (event) => {
+      const active = event.currentTarget.dataset.state === 'active';
+      event.currentTarget.dataset.state = active ? 'ready' : 'active';
+      event.currentTarget.textContent = active ? 'View in AR' : 'AR active';
+    });
+
+    qs('[data-launch-button]').addEventListener('click', (event) => {
+      const active = event.currentTarget.dataset.state === 'open';
+      event.currentTarget.dataset.state = active ? 'ready' : 'open';
+      event.currentTarget.textContent = active ? 'Launch' : 'Opened';
+    });
+
+    renderProject();
+  </script>
+</body>
+</html>
