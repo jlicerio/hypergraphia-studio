@@ -12,6 +12,8 @@ The identity must behave as a flexible visual language, not as one fixed logo or
 
 The system must support generative art, parametric studies, public installations, portfolio documentation, and XR scenes.
 
+The identity is a construct for portrayal. It keeps one recognizable grammar while it reconfigures modules for each project.
+
 ## Research references
 
 - [Generative Gestaltung — Creative Coding for the Web](https://www.hartmut-bohnacker.de/projects/generative-design-2-0) translates Processing examples into browser-based p5.js studies.
@@ -30,6 +32,19 @@ The system must support generative art, parametric studies, public installations
 6. **The artwork can change.** Generative color belongs inside the scene, not inside operational text.
 
 ## System layers
+
+### Construct model
+
+The construct keeps four stable layers:
+
+1. **Rules** — seed, type, motion, color, and generator version.
+2. **Structure** — space, depth, relation, and spatial composition.
+3. **Portrayal** — mesh, Gaussian splat, video, image, or data field.
+4. **Manifestation** — web, portfolio, XR, installation, or museum context.
+
+The portrayal layer can change without changing the identity grammar.
+
+The manifestation layer can change without changing the portrayal contract.
 
 ### Components
 
@@ -104,7 +119,11 @@ The URL should preserve the scene, seed, and palette.
 
 The prototype lives at [`generative-system-demo.html`](../../../generative-system-demo.html).
 
-It currently includes flow, orbit, and contour generators.
+It now presents the identity as a construct with Rules, Structure, Portrayal, and Manifestation stages.
+
+It includes a portrayal switcher for Field, Object, Splat, and Narrative modules.
+
+The separate generative lab includes flow, orbit, and contour generators.
 
 It supports density, tension, depth, motion, palette, seed, capture, and theme controls.
 

@@ -97,6 +97,21 @@
     .mode-bar button[aria-selected="true"], .mode-bar button:hover { background: var(--surface-raised); color: var(--ink); }
     .mode-bar button[aria-selected="true"] { box-shadow: inset 0 -2px var(--system-accent); }
 
+    .construct-panel { padding: 54px 0 22px; border-bottom: 1px solid var(--line); }
+    .construct-head { display: grid; grid-template-columns: minmax(0, .92fr) minmax(260px, .55fr); gap: 36px; align-items: end; }
+    .construct-head h2 { margin: 0; max-width: 760px; font-size: clamp(2.8rem, 6vw, 6rem); line-height: .9; letter-spacing: -.075em; font-weight: 500; }
+    .construct-head p { max-width: 430px; margin: 0; color: var(--muted); font-size: 17px; }
+    .construct-map { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 38px; }
+    .construct-map::before { content: ""; position: absolute; left: 9%; right: 9%; top: 50%; border-top: 1px solid var(--line-strong); pointer-events: none; }
+    .construct-node { position: relative; z-index: 1; min-height: 142px; display: flex; flex-direction: column; justify-content: space-between; padding: 16px; border: 1px solid var(--line); background: var(--bg); transition: background .2s ease, border-color .2s ease, transform .2s ease; }
+    .construct-node:hover { transform: translateY(-3px); border-color: var(--line-strong); background: var(--surface-raised); }
+    .construct-node strong { font-size: 24px; font-weight: 500; letter-spacing: -.05em; }
+    .construct-node small { color: var(--muted); font-size: 13px; }
+    .construct-switcher { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 24px; }
+    .construct-switcher button { border: 1px solid var(--line); border-radius: 999px; padding: 9px 13px; background: transparent; color: var(--muted); cursor: pointer; }
+    .construct-switcher button:hover, .construct-switcher button[aria-selected="true"] { color: var(--ink); border-color: var(--line-strong); background: var(--surface-raised); }
+    .construct-state { margin: 0 0 0 auto; color: var(--muted); }
+
     .section-head { display: flex; justify-content: space-between; align-items: end; gap: 24px; padding: 64px 0 20px; border-bottom: 1px solid var(--line); }
     .section-head h2 { margin: 0; font-size: clamp(2rem, 4vw, 4rem); line-height: .98; letter-spacing: -.05em; font-weight: 500; }
     .section-head p { max-width: 430px; margin: 0; color: var(--muted); }
@@ -196,6 +211,9 @@
     @media (max-width: 900px) {
       .shell { padding: 0 20px 60px; }
       .lab-grid { grid-template-columns: 1fr; }
+      .construct-head { grid-template-columns: 1fr; gap: 18px; }
+      .construct-map { grid-template-columns: repeat(2, 1fr); }
+      .construct-map::before { display: none; }
       .component--wide, .component--medium { grid-column: 1 / -1; }
       .state-row { grid-template-columns: repeat(2, 1fr); }
       .hierarchy { grid-template-columns: repeat(2, 1fr); }
@@ -210,6 +228,10 @@
       .intro p { font-size: 16px; }
       .section-head { display: block; }
       .section-head p { margin-top: 16px; }
+      .construct-panel { padding-top: 42px; }
+      .construct-map { grid-template-columns: 1fr; }
+      .construct-node { min-height: 112px; }
+      .construct-state { width: 100%; margin: 4px 0 0; }
       .viewer { min-height: 500px; }
       .viewer-title strong { font-size: 3rem; }
       .project-row { grid-template-columns: 45px 1fr; }
@@ -242,8 +264,8 @@
     <main>
       <section class="intro" aria-labelledby="page-title">
         <p class="mono muted">Shared identity and component demo</p>
-        <h1 id="page-title">One system.<br><em>Many surfaces.</em></h1>
-        <p>This demo carries the RGVXR interaction language into Hypergraphia Studio, the personal portfolio, and XR Sandbox.</p>
+        <h1 id="page-title">One construct.<br><em>Many manifestations.</em></h1>
+        <p>This demo shows one flexible identity grammar. Reconfigure its modules to portray a scan, artwork, installation, or XR experience.</p>
       </section>
 
       <nav class="mode-bar" aria-label="Surface modes" role="tablist">
@@ -253,13 +275,37 @@
         <button type="button" role="tab" aria-selected="false" data-mode="authoring">Authoring</button>
       </nav>
 
+      <section class="construct-panel" aria-labelledby="construct-title">
+        <div class="construct-head">
+          <div>
+            <p class="mono muted">Identity construct / modular portrayal</p>
+            <h2 id="construct-title">The structure<br>is the identity.</h2>
+          </div>
+          <p>Rules create recognition. Modules create variation. Each project receives a new configuration without requiring a new brand.</p>
+        </div>
+        <div class="construct-map" aria-label="Identity construct flow">
+          <article class="construct-node"><span class="mono">01 / grammar</span><strong>Rules</strong><small>seed · type · motion</small></article>
+          <article class="construct-node"><span class="mono">02 / field</span><strong>Structure</strong><small>space · depth · relation</small></article>
+          <article class="construct-node"><span class="mono">03 / object</span><strong>Portrayal</strong><small>mesh · splat · video</small></article>
+          <article class="construct-node"><span class="mono">04 / context</span><strong>Manifestation</strong><small>web · XR · installation</small></article>
+        </div>
+        <div class="construct-switcher" role="group" aria-label="Portrayal modules">
+          <span class="mono muted">Active module</span>
+          <button type="button" data-portrayal="field" aria-selected="true">Field</button>
+          <button type="button" data-portrayal="object" aria-selected="false">Object</button>
+          <button type="button" data-portrayal="splat" aria-selected="false">Splat</button>
+          <button type="button" data-portrayal="narrative" aria-selected="false">Narrative</button>
+          <p class="construct-state mono" data-construct-state>PORTRAYAL / FIELD</p>
+        </div>
+      </section>
+
       <section aria-labelledby="lab-title">
         <div class="section-head">
           <div>
-            <p class="mono muted">Component family / 01</p>
-            <h2 id="lab-title">Immersive viewer</h2>
+            <p class="mono muted">Portrayal system / 01</p>
+            <h2 id="lab-title">Manifestation viewer</h2>
           </div>
-          <p>The RGVXR carousel becomes a reusable surface. The content, theme, and entry action can change without changing the interaction grammar.</p>
+          <p>The carousel becomes a reusable portrayal surface. Content, theme, and entry action can change without changing the interaction grammar.</p>
         </div>
 
         <div class="lab-grid">
@@ -394,6 +440,19 @@
     qsa('[data-mode]').forEach((button) => button.addEventListener('click', () => {
       root.dataset.surface = button.dataset.mode;
       qsa('[data-mode]').forEach((item) => item.setAttribute('aria-selected', String(item === button)));
+    }));
+
+    const portrayalNames = {
+      field: 'PORTRAYAL / FIELD',
+      object: 'PORTRAYAL / OBJECT',
+      splat: 'PORTRAYAL / GAUSSIAN SPLAT',
+      narrative: 'PORTRAYAL / NARRATIVE'
+    };
+    qsa('[data-portrayal]').forEach((button) => button.addEventListener('click', () => {
+      const portrayal = button.dataset.portrayal;
+      root.dataset.portrayal = portrayal;
+      qsa('[data-portrayal]').forEach((item) => item.setAttribute('aria-selected', String(item === button)));
+      qs('[data-construct-state]').textContent = portrayalNames[portrayal];
     }));
 
     qs('.theme-toggle').addEventListener('click', () => {
