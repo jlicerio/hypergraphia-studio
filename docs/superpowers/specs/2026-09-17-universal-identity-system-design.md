@@ -12,6 +12,11 @@ The system must preserve the RGVXR interaction quality while supporting differen
 
 The system must prevent duplicated tokens, project metadata, and AR interaction logic.
 
+Related records:
+
+- [Generative identity research](../../research/2026-09-17-generative-identity-and-immersive-studios.md)
+- [Generative lab readiness roadmap](../../roadmaps/2026-09-17-generative-lab-readiness.md)
+
 ## Brand architecture
 
 ### Juan Licerio

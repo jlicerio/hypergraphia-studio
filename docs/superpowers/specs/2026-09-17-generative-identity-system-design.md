@@ -14,6 +14,11 @@ The system must support generative art, parametric studies, public installations
 
 The identity is a construct for portrayal. It keeps one recognizable grammar while it reconfigures modules for each project.
 
+Supporting records:
+
+- [Research record](../../research/2026-09-17-generative-identity-and-immersive-studios.md)
+- [Readiness roadmap](../../roadmaps/2026-09-17-generative-lab-readiness.md)
+
 ## Research references
 
 - [Generative Gestaltung — Creative Coding for the Web](https://www.hartmut-bohnacker.de/projects/generative-design-2-0) translates Processing examples into browser-based p5.js studies.
