@@ -1,6 +1,6 @@
 # Hypergraphia Web Visualizer and Data Runtime
 
-Status: draft for review
+Status: revised draft for review
 Review date: 2026-09-17
 Owner: Hypergraphia Studio
 
@@ -85,8 +85,13 @@ flowchart LR
   H --> I[Replay buffer]
   I --> J[Scene manifest]
   J --> E
-  J --> F
 ```
+
+The first slice renders only in Three.js.
+
+Unreal receives an offline export profile later.
+
+The manifest does not enter Unreal during the first slice.
 
 ## Visualizer model
 
@@ -112,6 +117,16 @@ The scene includes these primitives:
 The first release uses simple boxes, planes, cylinders, grids, and transparent frustums.
 
 It does not use CAD geometry in the first release.
+
+The canonical frame uses metres, a right-handed coordinate system, Y-up, and an origin at the room floor center.
+
+The room uses X for width, Y for height, and Z for depth.
+
+The front wall sits at positive Z.
+
+The display surface center defines the local origin for its content adapter.
+
+The projector pose defines the frustum apex.
 
 ## Visualizer modes
 
@@ -178,22 +193,49 @@ MindAR and model-viewer remain isolated runtimes.
 
 ### Existing integration surface
 
-The XR Sandbox already contains Node, TypeScript, Express, WebSockets, Zod, Three.js, React, Vite, Python simulation support, and splat dependencies.
+The XR Sandbox is the canonical runtime host for the first slice.
 
-The shared runtime must choose one canonical version before renderer extraction.
+The runtime uses its resolved Three.js `0.185.1` version.
+
+The Hypergraphia site remains the presentation and launch shell.
+
+The legacy `work/rgvxr` build remains a case-study reference.
+
+It does not share Three.js objects with the new runtime.
+
+The XR Sandbox contains Node, TypeScript, Express, WebSockets, Zod, Three.js, React, Vite, Python simulation support, and splat dependencies.
+
+MindAR remains isolated at its vendored Three.js version.
+
+Model-viewer remains isolated in its native handoff document.
+
+The local service binds to localhost by default.
+
+The service uses an explicit origin allowlist.
+
+Asset routes allow only manifest-listed public derivatives.
+
+The service rejects path traversal and private source-asset requests.
+
+Capture writes use a temporary file and an atomic rename.
 
 ## Data contract
 
 ```json
 {
-  "schemaVersion": "0.1",
+  "schemaVersion": 1,
+  "eventId": "evt-00001042",
+  "manifestId": "media-lab-room-01",
   "source": "heritage-dataset",
-  "timestamp": "2026-09-17T00:00:00Z",
+  "sourceVersion": "0.1.0",
+  "eventTime": "2026-09-17T00:00:00Z",
+  "ingestTime": "2026-09-17T00:00:00Z",
   "sequence": 1042,
   "stream": {
     "status": "LIVE",
     "rateHz": 12,
     "latencyMs": 80,
+    "staleAfterMs": 2000,
     "frozen": false
   },
   "signals": {
@@ -215,6 +257,33 @@ The renderer consumes normalized signals.
 
 The manifest records the mapping from signal to visual parameter.
 
+The first manifest uses this minimum shape:
+
+```json
+{
+  "manifestId": "media-lab-room-01",
+  "manifestVersion": 1,
+  "units": "meters",
+  "upAxis": "Y",
+  "handedness": "right",
+  "origin": "room-floor-center",
+  "room": { "width": 6, "depth": 4, "height": 3 },
+  "anchors": {
+    "led-wall": { "position": [0, 1.5, 1.8], "size": [4, 2.25] },
+    "projection-surface": { "position": [0, 1.5, -1.8], "size": [4, 2.25] },
+    "projector": { "position": [0, 2.8, 0], "target": "projection-surface" },
+    "content-object": { "position": [0, 0.3, 0], "scale": 1 }
+  },
+  "assets": [{ "id": "content-object", "adapter": "glb", "source": "fixture.glb" }],
+  "mappings": {
+    "density": { "target": "content-object.scale", "range": [0.6, 1.4] },
+    "motion": { "target": "data-field.rate", "range": [0, 1] }
+  }
+}
+```
+
+The manifest rejects missing units, axes, room dimensions, anchor names, asset adapters, and mapping ranges.
+
 The replay buffer preserves the original event sequence.
 
 The runtime accepts only `WAITING`, `LIVE`, `STALE`, `ENDED`, and `ERROR` stream states.
@@ -223,17 +292,37 @@ The `STALE` state freezes the last valid sample and reports its timestamp.
 
 The `ERROR` state reports the validation failure without changing the last valid scene.
 
+The WebSocket and JSONL replay paths use this same serialized event envelope.
+
+The service rejects unknown schema versions, invalid numbers, and out-of-range signals.
+
+The service ignores duplicate sequences and reports out-of-order events.
+
+The service enters `STALE` after `staleAfterMs` and resumes `LIVE` after a valid event.
+
+The service enters `ENDED` after an explicit stream close.
+
+The service records a virtual replay clock for deterministic playback.
+
 ## Asset contract
 
 Every portrayal adapter must expose:
 
-- `load(source)`.
+- `load(source, options)` returning a promise.
 - `dispose()`.
 - `setTransform(transform)`.
 - `setSignalState(signals)`.
 - `getBounds()`.
 - `getMetadata()`.
 - `getFallbackState()`.
+
+The load options include an abort signal and an asset hash.
+
+The adapter owns resources until `dispose()` runs.
+
+Bounds use the canonical room frame.
+
+Fallback states distinguish missing, blocked, invalid, and cancelled assets.
 
 This contract supports mesh, image, video, and Gaussian splat content.
 
@@ -249,9 +338,9 @@ Splat assets must not be converted into GLB or USDZ.
 
 ## First implementation slice
 
-The first slice must create one room-scale media lab.
+The first slice must create one room-scale media lab in the XR Sandbox host.
 
-It must include one GLB object, one video surface, one projector frustum, one XR target, and one data field.
+It must include one GLB object, one video surface, one projector frustum, one XR target, and one deterministic local data field.
 
 It must include plan, stage, projection, XR, and data modes.
 
@@ -264,6 +353,14 @@ It must keep the backend local and private during development.
 It must label simulated projector and XR behavior as illustrative.
 
 It must label case-study status as `VERIFIED`, `PROTOTYPE`, or `PROPOSED`.
+
+The first slice does not include live network streams, hardware control, SPZ rendering, or Unreal export.
+
+The first slice uses one pinned Three.js version, one manifest, and one fixture asset set.
+
+The first slice captures a canonical state hash from the manifest, asset hashes, seed, virtual clock, camera transform, viewport, renderer version, and last event sequence.
+
+Replay verification compares canonical state hashes before visual pixel comparison.
 
 ## Verification
 
