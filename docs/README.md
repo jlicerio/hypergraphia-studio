@@ -1,6 +1,6 @@
 # Hypergraphia Documentation Index
 
-The workspace root holds the interface contract: `DESIGN.md` (three directories above this file).
+The design contract lives at [DESIGN.md](./DESIGN.md).
 
 ## Identity specifications
 
